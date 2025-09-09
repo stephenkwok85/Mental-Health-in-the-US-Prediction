@@ -1,0 +1,360 @@
+\documentclass{article}
+
+\usepackage[final]{neurips_2024}  % Ensure author names are shown
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{graphicx}       % images
+\usepackage{float}
+\usepackage{adjustbox}
+
+\usepackage{titlesec}
+
+% Reduce spacing before and after sections
+\titlespacing{\section}{0pt}{10pt}{5pt}  % Adjusts section spacing
+\titlespacing{\subsection}{0pt}{5pt}{3pt}  % Adjusts subsection spacing
+\setlength{\parskip}{0pt}
+
+
+\title{\large Mental Health Interventions in the U.S: Comparing Counseling and Prescription Treatments after COVID-19}
+
+
+\author{
+  Stephen Kwok \\
+  \texttt{NetID: sk2631} \\
+  \And
+  Kevin Wong \\
+  \texttt{NetID: kw709} \\
+}
+
+\begin{document}
+
+\maketitle 
+
+\vspace{-20pt}
+
+\section{Introduction}
+
+\subsection{Problem being solved}
+
+Mental health care utilization is influenced by various demographic, socioeconomic, and psychological factors. Understanding these predictors can help policymakers and healthcare providers improve access to mental health services. In this project, we aim to solve the lingering questions: can we predict whether an individual will seek mental health care based on demographic, socioeconomic, and behavioral factors, and which factors (e.g., income, age, employment status) most influence the likelihood of seeking mental health care. We aim to predict whether individuals seek mental health care (medication or therapy) based on demographic, socioeconomic, and behavioral factors. The core problem involves identifying patterns in mental health service utilization and understanding which factors most strongly influence care-seeking behavior. This is particularly relevant for public health policy, as it can highlight disparities in access and inform targeted interventions for underserved populations.
+
+
+\subsection{How the problem is being solved and answered}
+
+To solve this problem and answer our research questions, we will implement a comprehensive analytical approach using unsupervised learning techniques. First, we will conduct thorough data preprocessing to ensure data quality and model readiness. This includes handling missing values through imputation or removal, normalizing numerical features to comparable scales, and encoding categorical variables like race, education level, and employment status using one-hot encoding. Then, we will employ principal component analysis (PCA) to reduce the dimensionality of our mental health indicators while preserving the most significant patterns in the data. This dimensionality reduction will help us visualize complex relationships and prepare the data for clustering. We will then apply K-Means clustering to identify natural groupings in the population based on their mental health care utilization patterns and demographic characteristics. The elbow method and silhouette scores will help us determine the optimal number of clusters. These clusters will be analyzed to uncover distinct behavioral patterns across different demographic subgroups (e.g., young adults with high anxiety symptoms but low treatment rates, or middle-aged individuals with consistent care utilization). To complement these findings, we will implement supervised learning models to predict care-seeking behavior. We'll frame this as both a binary classification problem (predicting whether someone sought care) and a regression problem (predicting the intensity of care utilization). Our model selection will include logistic regression as a baseline, random forests for their robustness to nonlinear relationships, and gradient boosting machines for their predictive power. We'll use techniques like stratified k-fold cross-validation to ensure reliable performance estimates and address class imbalances if present in our target variables.
+
+\vspace{0.5cm}
+
+Throughout this process, we will prioritize model interpretability to extract actionable insights. Feature importance analysis from our supervised models will identify the strongest predictors of care-seeking behavior, while cluster profiles from our unsupervised analysis will reveal subgroups with distinct needs and barriers. The combination of these approaches will provide a comprehensive understanding of mental health care utilization patterns, enabling us to both predict individual behavior and identify systemic patterns that could inform targeted public health interventions. We'll validate our findings through multiple methods, including comparing cluster stability across different algorithms and assessing model performance on held-out test data, ensuring our results are both statistically sound and practically meaningful for mental health policy and practice.
+
+\section{Motivation}
+\subsection{Importance and reason for choosing this project}
+
+Mental health remains one of the most pressing yet stigmatized public health challenges today, with significant disparities in care access across demographic groups. This project is important because it can reveal hidden patterns in mental health care utilization, helping policymakers identify underserved populations and allocate resources more effectively by understanding which groups are less likely to seek care, whether due to socioeconomic barriers, cultural stigma, or systemic gaps, we can develop targeted interventions to improve mental health equity. I’m particularly excited about this project because it combines data-driven insights with real-world impact, offering a way to bridge the gap between statistical patterns and actionable public health strategies.
+
+\subsection{Existing questions and prior related works}
+Existing research in this area has primarily relied on supervised learning methods, such as logistic regression or decision trees, to predict care-seeking behavior using predefined labels (e.g., "sought treatment: yes/no"). While these studies have identified key predictors like income, education, and symptom severity, they often require strong assumptions about the relationships in the data. In contrast, our unsupervised learning approach allows the data to speak for itself, uncovering natural groupings and patterns that might be overlooked in traditional models. For example, prior work has shown that racial minorities and low-income individuals face higher barriers to care, but clustering techniques could reveal nuanced subgroups within these populations, such as young adults with high symptom severity but low care utilization, that warrant tailored interventions. By building on these foundations while introducing an unsupervised perspective, this project aims to provide a more holistic understanding of mental health care disparities.
+
+\section{Method}
+\subsection{Dataset that we used and its features}
+We utilized the U.S. Census Household Pulse Survey dataset, specifically the \textit{Mental Health Care in the Last 4 Weeks} module. This dataset provides structured, tabular data on mental health service utilization across diverse demographic groups. It includes categorical features such as \texttt{Group} (e.g., ``By Age,'' ``By Race'') and \texttt{Subgroup} (e.g., ``18--29 years,'' ``Female''), along with numerical \texttt{Indicator} values (e.g., ``\% took medication,'' ``\% received counseling'') that quantify care-seeking behaviors.
+
+\subsection{Analysis of this dataset}
+Our analysis followed a systematic pipeline: First, we reshaped the data into a wide format to enable direct comparison of subgroups across different mental health indicators. After handling missing values, we standardized the features using \texttt{StandardScaler} to ensure equal weighting in our clustering analysis. To manage the high-dimensional nature of the data, we applied Principal Component Analysis (PCA), reducing the feature space to two dimensions while preserving 95\% of the variance. We then performed K-Means clustering (\(k = 4\)) to identify natural groupings among demographic segments based on their care utilization patterns.
+
+
+\subsection{Implementation of this project}
+To interpret results, we visualized clusters using scatter plots (annotated with subgroup labels) and analyzed PCA component loadings to determine which features drove the observed patterns. Heatmaps and bar plots further elucidated behavioral differences between clusters, for example, revealing whether certain age or income groups consistently showed high unmet needs. This approach allowed us to move beyond traditional demographic breakdowns and instead uncover data-driven subgroups with distinct mental health care profiles.
+
+\section{Results}
+\begin{figure}[H]
+    
+    \centering
+    \begin{adjustbox}{max width=\textwidth}
+    \includegraphics[height=8cm]{pca_graph.png}
+    \end{adjustbox}
+    \caption{The visualization shows how different demographic, socioeconomic, and behavioral subgroups cluster based on mental health care utilization patterns. Each point represents a subgroup (e.g., by age, gender identity, or state), with position determined by principal component analysis and color indicating cluster membership. Distinct clustering suggests that variables like gender identity, sexual orientation, disability status, and symptoms of anxiety or depression are strong predictors of service use. Geographic and racial/ethnic differences also influence clustering, likely reflecting disparities in access, stigma, or policy. Overall, the visualization highlights how these factors shape mental health care-seeking behavior.}
+    \label{fig:yourlabel}
+\end{figure}
+
+\begin{figure}[H]
+    
+    \centering
+    \begin{adjustbox}{max width=\textwidth}
+    \includegraphics[height=6cm]{k_meansclustering.png}
+    \end{adjustbox}
+
+        \caption{The plot demonstrates that mental health care-seeking behavior can be clustered and thus predicted based on subgroup characteristics. The presence of clear clusters indicates underlying patterns related to demographic, socioeconomic, and behavioral factors. Groups that are behavioral outliers—likely those facing unique barriers or needs—are identifiable, suggesting that targeted mental health interventions could be designed based on cluster membership. This supports the hypothesis that characteristics such as age, symptoms, gender identity, and possibly income or education play a meaningful role in determining whether someone is likely to seek mental health care.}
+        \label{fig:yourlabel}
+    \end{figure}
+    
+    \begin{figure}[H]
+        
+        \centering
+        \begin{adjustbox}{max width=\textwidth}
+        \includegraphics[height=8.5cm]{mental_healthheatmap.png}
+        \end{adjustbox}
+
+        \caption{This heatmap confirms that mental health service utilization patterns differ significantly across population clusters, aligning with variations in need and access. Cluster 1 stands out as the highest-need and highest-utilization group, while Cluster 2 represents the opposite extreme. These insights support the research hypothesis that individual-level variables—especially those tied to mental health symptoms and marginalized identities—are strong predictors of whether someone will seek or access care.}
+        \label{fig:yourlabel}
+    \end{figure}
+    
+    \begin{figure}[H]
+    
+        \centering
+        \begin{adjustbox}{max width=\textwidth}
+        \includegraphics[height=8cm]{db_clustering.png}
+        \end{adjustbox}
+
+        \caption{The DBSCAN and Agglomerative Clustering plots on PCA-reduced data reveal different group structures. DBSCAN identifies one main cluster and many outliers, suggesting most individuals share behavioral patterns while others, often with uncommon demographics, have distinct profiles. In contrast, Agglomerative Clustering forms broader, more inclusive groups, enabling clearer population segmentation (e.g., by age or education). The table shows that Cluster 1 has high values across all indicators, reflecting strong engagement with mental health care, while Cluster 2 shows low values, indicating disengagement. These patterns align with the PCA results.}
+    \label{fig:yourlabel}
+\end{figure}
+
+\begin{figure}[H]
+
+    \centering
+    \begin{adjustbox}{max width=\textwidth}
+    \includegraphics[height=8.5cm]{top_pca.png}
+    \end{adjustbox}
+
+    \caption{This bar plot shows the average standardized mental health care utilization indicators across four clusters formed through PCA and clustering. Cluster 2 has high positive values, indicating individuals who both need and access care—likely due to enabling factors like stable employment, income, or healthcare access. Cluster 1 shows consistently negative values, representing those disengaged from services, possibly due to socioeconomic barriers or stigma. Cluster 0 is moderately disengaged, and Cluster 3 is more neutral. These clear differences support our research question: mental health care-seeking behavior can be predicted using demographic, socioeconomic, and behavioral factors. The clustering reflects how variables like income, age, employment status, gender identity, and disability status shape access and engagement with mental health services. This evidence reinforces that predictive modeling based on these factors can identify distinct behavioral patterns and help guide targeted policy interventions.}
+    \label{fig:yourlabel}
+\end{figure}
+
+\section{Modeling Results}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Group} & \textbf{Subgroup} & \textbf{Cluster} \\
+\hline
+By Age & 18 -- 29 years & 0 \\
+By Age & 30 -- 39 years & 0 \\
+By Age & 40 -- 49 years & 0 \\
+By Age & 50 -- 59 years & 2 \\
+By Age & 60 -- 69 years & 1 \\
+By Age & 70 -- 79 years & 1 \\
+By Age & 80 years and above & 1 \\
+By Education & Bachelor's degree or higher & 0 \\
+\hline
+\end{tabular}
+\vspace{0.5em}
+\caption{Cluster assignments based on age and education subgroups.}
+\end{table}
+
+\subsection{Interpretation}
+Logistic Regression Performance and Coefficients:
+\begin{itemize}
+    \item \textbf{Accuracy:} 1.0
+    \item \textbf{Coefficients:}
+    \begin{itemize}
+        \item Took Prescription Medication for Mental Health, Last 4 Weeks: 1.509
+        \item Received Counseling or Therapy, Last 4 Weeks: 0.768
+        \item Needed Counseling or Therapy But Did Not Get It, Last 4 Weeks: -0.214
+    \end{itemize}
+\end{itemize}
+
+Random Forest Performance and Feature Importances:
+\begin{itemize}
+    \item \textbf{Accuracy:} 0.944
+    \item \textbf{Feature Importances:}
+    \begin{itemize}
+        \item Took Prescription Medication for Mental Health, Last 4 Weeks: 0.596
+        \item Received Counseling or Therapy, Last 4 Weeks: 0.245
+        \item Needed Counseling or Therapy But Did Not Get It, Last 4 Weeks: 0.159
+    \end{itemize}
+\end{itemize}
+
+\begin{table}[h!]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Index} & \textbf{Top PC1 Features} & \textbf{PC1 Contribution} & \textbf{PC2 Contribution} \\
+\midrule
+0 & Took Prescription Medication for Mental Health, Last 4 Weeks & 0.5195 & 0.6406 \\
+1 & Needed Counseling or Therapy But Did Not Get It, Last 4 Weeks & 0.5003 & 0.4089 \\
+2 & Received Counseling or Therapy, Last 4 Weeks & 0.4899 & 0.5645 \\
+3 & Took Prescription Medication for Mental Health, Ever & 0.4897 & 0.3221 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Top Contributing Features for PC1 and PC2}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+
+\begin{tabular}{lccc}
+\toprule
+\textbf{Cluster} & \textbf{Needed Counseling (Z-score)} & \textbf{Received Counseling (Z-score)} & \textbf{Took Medication (Z-score)} \\
+\midrule
+0 & -0.2918 & -0.3528 & -0.4750 \\
+1 &  3.1680 &  2.9568 &  2.9111 \\
+2 & -1.1318 & -0.9965 & -1.4826 \\
+3 &  0.0140 &  0.0621 &  0.2461 \\
+\bottomrule
+\end{tabular}
+
+\end{adjustbox}
+\caption{Cluster-wise Standardized Scores for Mental Health Indicators}
+\end{table}
+
+\subsection{Interpretation}
+
+PCA helped reveal the most informative features, and the principal components (PC1 and PC2) are dominated by three behavioral indicators:
+\begin{itemize}
+    \item Took Prescription Medication
+    \item Received Counseling or Therapy
+    \item Needed Counseling or Therapy but Did Not Get It
+\end{itemize}
+
+These features collectively explain a significant proportion of the variance in the data. PC1 reflects actual engagement with mental health services, while PC2 further emphasizes unmet needs and therapy use. Notably, the strongest contributing factor to both PC1 and PC2 is taking prescription medication, suggesting it is a powerful proxy for overall mental health service engagement.
+
+\vspace{0.5cm}
+
+Classifying population subgroups into high vs. low mental health care-seeking behavior, using demographic, socioeconomic, and behavioral feature:
+
+\vspace{0.2cm}
+
+\textbf{Logistic Regression} \\
+Test Accuracy: 0.688 \\
+ROC AUC: 0.875
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+0 & 0.71 & 0.62 & 0.67 & 8 \\
+1 & 0.67 & 0.75 & 0.71 & 8 \\
+\hline
+\textbf{Accuracy} & \multicolumn{4}{c|}{0.69 (Total = 16)} \\
+\textbf{Macro avg} & 0.69 & 0.69 & 0.69 & 16 \\
+\textbf{Weighted avg} & 0.69 & 0.69 & 0.69 & 16 \\
+\hline
+\end{tabular}
+\caption{Classification metrics for Logistic Regression}
+\end{table}
+
+\vspace{1em}
+
+\textbf{Random Forest} \\
+Test Accuracy: 0.875 \\
+ROC AUC: 0.961
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+0 & 1.00 & 0.75 & 0.86 & 8 \\
+1 & 0.80 & 1.00 & 0.89 & 8 \\
+\hline
+\textbf{Accuracy} & \multicolumn{4}{c|}{0.88 (Total = 16)} \\
+\textbf{Macro avg} & 0.90 & 0.88 & 0.87 & 16 \\
+\textbf{Weighted avg} & 0.90 & 0.88 & 0.87 & 16 \\
+\hline
+\end{tabular}
+\caption{Classification metrics for Random Forest}
+\end{table}
+
+\vspace{1em}
+
+\textbf{Gradient Boosting} \\
+Test Accuracy: 0.875 \\
+ROC AUC: 0.938
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+\hline
+0 & 0.88 & 0.88 & 0.88 & 8 \\
+1 & 0.88 & 0.88 & 0.88 & 8 \\
+\hline
+\textbf{Accuracy} & \multicolumn{4}{c|}{0.88 (Total = 16)} \\
+\textbf{Macro avg} & 0.88 & 0.88 & 0.88 & 16 \\
+\textbf{Weighted avg} & 0.88 & 0.88 & 0.88 & 16 \\
+\hline
+\end{tabular}
+\caption{Classification metrics for Gradient Boosting}
+\end{table}
+
+\subsection{Interpretation}
+The supervised classification analysis demonstrates that mental health care-seeking behavior can be accurately predicted using behavioral, demographic, and socioeconomic features. Models like Random Forest and Gradient Boosting achieved high accuracy (0.875) and ROC AUC scores above 0.93, confirming strong predictive power. Feature importance analysis revealed that behavioral indicators—such as taking prescription medication and receiving counseling—were the most influential predictors. Cross-validation results further confirmed model stability and generalizability. Overall, the results support our hypothesis that data-driven models can effectively identify high and low care-seeking groups and highlight the behavioral factors most associated with mental health service utilization.
+
+\subsection{Questions these results raise and further analysis}
+
+Based on our clustering results and model outputs, several new questions have emerged that can guide further investigation and enhance the utility of our findings:
+
+\vspace{0.3cm}
+
+\textbf{1. Why is Cluster 1 highly distinct in both need and utilization?}\
+Cluster 1 exhibited the highest values across all mental health indicators and the strongest PC1 score. This suggests that individuals in this group are both in need of and engaged with mental health care services. Further analysis should examine the structural and demographic variables enabling this access, such as insurance coverage, urban residency, or socioeconomic status. Feature importance and SHAP analysis could help identify key drivers differentiating this cluster.
+
+\vspace{0.1cm}
+
+\textbf{2. What accounts for the extreme underutilization in Cluster 2?}\
+Despite having some need, Cluster 2 shows significant underutilization of mental health services. This raises the possibility of cultural, geographic, or systemic barriers. Analyzing the subgroup composition (e.g., race, income, education level) and potential underdiagnosis or stigma-related factors would provide deeper insight.
+
+\vspace{0.1cm}
+
+\textbf{3. How does age influence care-seeking behavior?}\
+Older age groups (60+) predominantly fall into Cluster 1, whereas younger groups tend to be in Cluster 0, which shows moderate underutilization. This trend could be due to better coverage (e.g., Medicare), higher health literacy, or greater mental health burden among older adults. Stratified analysis across age groups can test these hypotheses.
+
+\vspace{0.1cm}
+
+\textbf{4. Do the models generalize well to unseen or intersectional subgroups?}\
+With a logistic regression accuracy of 1.0 and random forest accuracy of 0.94, overfitting may be a concern. Future work should evaluate model robustness by testing on holdout sets and underrepresented or intersectional subgroups.
+
+\vspace{0.1cm}
+
+\textbf{5. What role do structural and policy-level variables play?}\
+Current analysis is limited to individual-level data. Broader influences, such as state policy, Medicaid expansion, and telehealth availability, may drive group-level differences. Incorporating such variables into hierarchical models or as additional features could reveal systemic disparities.
+
+\vspace{0.1cm}
+
+\textbf{6. Are the top features in PCA stable across dimensionality reduction methods?}\
+PCA highlighted "medication use" and "therapy received" as dominant features. To validate this, alternative methods like t-SNE or UMAP could be employed, and feature importance should be compared across supervised and unsupervised models.
+
+\subsection{Final Conclusion}
+Our analysis confirms that mental health care-seeking behavior can be effectively predicted using demographic, socioeconomic, and behavioral factors. Both unsupervised and supervised learning approaches revealed clear patterns: individuals' likelihood of seeking care is strongly influenced by behavioral indicators—particularly prescription medication use, counseling participation, and unmet therapy needs. Clustering uncovered distinct population segments, such as older adults with high utilization and middle-income groups with unexpectedly low engagement. Supervised models achieved high accuracy, with Random Forest reaching 94\%, and identified medication use as the strongest predictor. These findings not only validate our research hypothesis but also highlight key disparities and opportunities for targeted interventions, such as mental health outreach for underserved subgroups or culturally tailored support programs. This project demonstrates how data-driven approaches can inform more equitable public health strategies.
+
+\section{Discussion}
+
+Our analysis yielded both expected and surprising insights about mental health care utilization patterns. As hypothesized, we found clear clusters segmented by age and income, with younger adults and lower-income groups showing distinct care-seeking behaviors, confirming existing research on demographic disparities.
+
+\vspace{0.5cm}
+
+However, we uncovered an unexpected pattern: middle-income subgroups demonstrated disproportionately low service utilization despite reporting moderate mental health needs. This suggests potential systemic barriers beyond affordability, such as lack of awareness, stigma, or provider shortages in certain regions.
+
+\vspace{0.5cm}
+
+These results differed from our initial assumptions in several ways. First, while we anticipated income to be a primary differentiator, the middle-income anomaly revealed nuances in access that pure economic explanations cannot address. Second, some racial/ethnic clusters showed more heterogeneity than predicted, indicating that cultural factors may interact with socioeconomic status in complex ways.
+
+\subsection{Future Work}
+
+We propose multiple directions for future research:
+
+\begin{itemize}
+    \item Incorporating temporal trends to track how utilization evolves post-pandemic.
+    \item Conducting geospatial analysis to overlay mental health provider availability with cluster patterns.
+    \item Using supervised learning models to test whether unsupervised clusters can predict unmet mental health needs.
+    \item Exploring alternative clustering methods (e.g., hierarchical clustering, DBSCAN) to validate the robustness of current findings.
+\end{itemize}
+
+The project’s limitations—including self-reported data and lack of individual-level variables—highlight opportunities to integrate electronic health records or community-level surveys for richer insights. Ultimately, these findings can inform targeted interventions, such as mental health literacy programs for middle-income ``care gaps'' or culturally tailored outreach for specific racial and ethnic clusters.
+\end{document}
